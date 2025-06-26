@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Table Output</title>
+  <style>
+    table, th, td {
+      border: 1px solid black;
+      border-collapse: collapse;
+      padding: 8px;
+      text-align: center;
+    }
+    table {
+      margin-bottom: 20px;
+    }
+  </style>
+</head>
+<body>
+
+<h2>Table 1</h2>
+<table id="Table1"></table>
+
+<!-- Layout of Table 2-->
+<h2>Table 2</h2>
+<table id="table2">
+  <tr>
+    <th>Category</th><th>Value</th>
+  </tr>
+  <tr><td>Alpha</td><td id="alpha"></td></tr>
+  <tr><td>Beta</td><td id="beta"></td></tr>
+  <tr><td>Charlie</td><td id="charlie"></td></tr>
+</table>
+
+<!--reading csv file for table 1-->
+<script>
+
+  fetch('Table_Input.csv') 
+    .then(response => response.text())
+    .then(text => {
+      const rows = text.trim().split('\n');
+
+      const data = {};
+      let html = '<tr><th>Index #</th><th>Value</th></tr>'; // add header manually cause have to skip later
+
+      // Skip header
+      rows.slice(1).forEach(row => {
+        const [id, value] = row.split(',');
+        data[id] = parseInt(value);
+
+        html += `<tr><td>${id}</td><td>${value}</td></tr>`;
+      });
+
+      // Display Table 1
+      document.getElementById('Table1').innerHTML = html;
+
+      let alpha = data['A5'] + data['A20'];
+      let beta = data['A15'] / data['A7'];
+      let charlie = data['A13'] * data['A12'];
+
+      // Display Table 2 values
+      document.getElementById('alpha').textContent = alpha;
+      document.getElementById('beta').textContent = beta;
+      document.getElementById('charlie').textContent = charlie;
+    })
+    .catch(error => console.error("Error loading CSV:", error)); //error handling
+
+ 
+</script>
+
+
+</body>
+</html>
